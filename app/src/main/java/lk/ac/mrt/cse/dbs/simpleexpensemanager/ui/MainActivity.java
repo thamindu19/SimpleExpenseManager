@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         expenseManager = new PersistentExpenseManager(getApplicationContext());
-        /*** END ***/
     }
 
     /**

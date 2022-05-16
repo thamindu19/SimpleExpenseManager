@@ -13,10 +13,6 @@ import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Account;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.ExpenseType;
 
 
-/**
- * PersistentAccountDAO can be used to persistently access the account details, including listing, adding, updating, removing
- * accounts and updating account balance.
- */
 public class PersistentAccountDAO implements AccountDAO {
     private SQLiteDatabase db;
 
@@ -24,9 +20,6 @@ public class PersistentAccountDAO implements AccountDAO {
         this.db = db;
     }
 
-    /***
-     * Get a list of account numbers.
-     */
     @Override
     public List<String> getAccountNumbersList() {
 
@@ -43,9 +36,6 @@ public class PersistentAccountDAO implements AccountDAO {
         return accountNumbers;
     }
 
-    /***
-     * Get a list of accounts.
-     */
     @Override
     public List<Account> getAccountsList() {
         Cursor curAcc = db.rawQuery("SELECT * FROM account", null);
@@ -64,9 +54,6 @@ public class PersistentAccountDAO implements AccountDAO {
         return accounts;
     }
 
-    /***
-     * Get the account given the account number.
-     */
     @Override
     public Account getAccount(String accountNo) throws InvalidAccountException {
         Cursor curAcc = db.rawQuery("SELECT * FROM account WHERE account_number = " + accountNo, null);
@@ -83,9 +70,6 @@ public class PersistentAccountDAO implements AccountDAO {
     return acc;
     }
 
-    /***
-     * Add an account to the accounts collection.
-     */
     @Override
     public void addAccount(Account account) {
         String prepStmt = "INSERT INTO account (account_number, bank, holder, balance) VALUES (?, ?, ?, ?)";
@@ -99,9 +83,6 @@ public class PersistentAccountDAO implements AccountDAO {
         sqlStmt.executeInsert();
     }
 
-    /***
-     * Remove an account from the accounts collection.
-     */
     @Override
     public void removeAccount(String accountNo) throws InvalidAccountException {
         String prepStmt = "DELETE FROM account WHERE account_number = ?";
@@ -112,9 +93,6 @@ public class PersistentAccountDAO implements AccountDAO {
         sqlStmt.executeUpdateDelete();
     }
 
-    /***
-     * Update the balance of the given account.
-     */
     @Override
     public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException {
         String prepStmt = "UPDATE account SET balance = balance + ?";
