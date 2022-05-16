@@ -16,14 +16,51 @@
 
 package lk.ac.mrt.cse.dbs.simpleexpensemanager;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
+import android.content.Context;
+
+import androidx.test.core.app.ApplicationProvider;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.ExpenseManager;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.PersistentExpenseManager;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.exception.InvalidAccountException;;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.ExpenseType;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
+public class ApplicationTest {
+    private static ExpenseManager expenseManager;
+
+    @Before
+    public void setUp() {
+        Context context = ApplicationProvider.getApplicationContext();
+        expenseManager = new PersistentExpenseManager(context);
     }
+
+    @Test
+    public void testAddAccount() {
+        expenseManager.addAccount("222", "BLVB", "D Ben", 23000);
+        List<String> accounts = expenseManager.getAccountNumbersList();
+        assertTrue(accounts.contains("222"));
+    }
+
+    @Test
+    public void testAddTransaction() throws InvalidAccountException {
+        expenseManager.updateAccountBalance("222", 17, 05, 2022, ExpenseType.EXPENSE, Double.toString(1000.0));
+        List<Transaction> transactions = expenseManager.getTransactionLogs();
+        Transaction trs = transactions.get(0);
+        assertEquals(trs.getAccountNo(), "222");
+        assertEquals(trs.getAmount(), 1000, 0.01);
+        assertEquals(trs.getExpenseType(), ExpenseType.EXPENSE);
+    }
+
 }
